@@ -38,8 +38,7 @@ export default function Page() {
   };
 
   const handleSelectClick = (e:any) => {
-    console.log('df')
-    setShowOptions(!showOptions)
+    setShowOptions(false)
     setInputValue(e.target.value)
   }
   const handleSubmit = async (e: any) => {
@@ -63,7 +62,7 @@ export default function Page() {
       setIsNotMatch(false)
     }
     setInputValue('')
-    setShowOptions(!showOptions)
+    setShowOptions(false)
   };
   const dogDataMap = dogData?.message.map((item: string) => {
     return (
@@ -82,7 +81,7 @@ export default function Page() {
   }
   console.log(inputValue)
   return (
-    <div className="flex flex-col items-center">
+    <div onClickCapture={() => setShowOptions(false)} className="flex flex-col items-center">
       <h1 className="m-4 text-3xl ">Search by Breed!</h1>
       <div>
         {IsNotMatch ? 'Breed name is misspelled or not in records' : null}
@@ -97,13 +96,15 @@ export default function Page() {
             placeholder="Type in a dogbreed to begin"
             value={inputValue}
             onChange={(e) => handleChange(e)}
-            onClick={() => setShowOptions(!showOptions)}
+            onClick={() => setShowOptions(true)}
             // onBlur={() => setShowOptions(!showOptions)}
             className="form-input w-full mt-4 outline outline-2 outline-offset-2 outline-neutral-200"
           />
           {showOptions? <select onClick={(e) => handleSelectClick(e)} size={dogList?.message.length} > 
-            {dogList ? dogList.message.map((item:string) => {return <option value={item} >{item}</option>}):null}
-          </select>:null}
+            {dogList ? dogList.message.map((item:string) => {return <option >{item}</option>}):null}
+          </select>:<select hidden onClick={(e) => handleSelectClick(e)} size={dogList?.message.length} > 
+            {dogList ? dogList.message.map((item:string) => {return <option >{item}</option>}):null}
+          </select>}
         </label>
         </div >
         <div className='grid justify-items-center'>

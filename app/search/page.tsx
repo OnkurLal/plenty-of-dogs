@@ -1,40 +1,96 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 export default function Page() {
   const [inputValue, setInputValue] = useState('');
   const [dogData, setDogData] = useState<any>(null);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [dogList, setDogList] = useState<any>(null);
+  const [IsNotMatch, setIsNotMatch] = useState(false);
+  const [unfilteredDogList, setUnfilteredDogList] = useState<any>(null);
+  const [showOptions, setShowOptions] = useState(false);
+  
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch('https://dog.ceo/api/breeds/list');
+        const data = await response.json();
+        setDogList(data);
+        setUnfilteredDogList(data);
+      } catch (error:any) {
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, []);
+
   const handleChange = (e: any) => {
     setInputValue(e.target.value);
+    if (unfilteredDogList?.message) {
+    const selectFilteredList = unfilteredDogList?.message.filter((breed:string) => breed.includes(e.target.value));
+    setDogList({message:selectFilteredList});
+    }
   };
+
+  const handleSelectClick = (e:any) => {
+    console.log('df')
+    setShowOptions(false)
+    setInputValue(e.target.value)
+  }
   const handleSubmit = async (e: any) => {
     setLoading(true);
     e.preventDefault();
-    try {
+    if (!dogList.message.includes(inputValue) ) {
+      setIsNotMatch(true)
+      setDogData(null)
+    }else{
+      try {
       const response = await fetch(
         `https://dog.ceo/api/breed/${inputValue}/images`,
       );
       const data = await response.json();
       setDogData(data);
-    } catch (err: any) {
+      } catch (err: any) {
       setError(err);
-    } finally {
+      } finally {
       setLoading(false);
+      }
+      setIsNotMatch(false)
     }
     setInputValue('')
+    setShowOptions(false)
   };
   const dogDataMap = dogData?.message.map((item: string) => {
     return (
       <img style={{ width: 400, height: 400 }} src={item} alt="random image" />
     );
   });
+
+  if (loading) {
+    return (
+    <>
+    <div className="flex justify-center items-center h-screen w-screen">
+    <div className="text-gray-600 w-10 h-10 text-5xl mx-auto">
+    <i className="fas fa-spinner fa-spin animate-spin" />
+    </div>
+    </div>
+    </>
+    );
+  }
+
   if (error) {
     return <p>An error occurred: {error}</p>;
   }
+  console.log(inputValue)
   return (
     <div className="flex flex-col items-center">
       <h1 className="m-4 text-3xl ">Search by Breed!</h1>
+      <div>
+        {IsNotMatch ? 'Breed name is misspelled or not in records' : null}
+      </div>
       <form onSubmit={handleSubmit} className="w-full max-w-sm">
         <div className='w-full'>
         <label className="m-4m block text-xl">
@@ -44,9 +100,14 @@ export default function Page() {
             type="text"
             placeholder="Type in a dogbreed to begin"
             value={inputValue}
-            onChange={handleChange}
+            onChange={(e) => handleChange(e)}
+            onClick={() => setShowOptions(!showOptions)}
+            // onBlur={() => setShowOptions(!showOptions)}
             className="form-input w-full mt-4 outline outline-2 outline-offset-2 outline-neutral-200"
           />
+          {showOptions? <select size={dogList?.message.length} > 
+            {dogList ? dogList.message.map((item:string) => {return <option value={item} onClick={(e) => handleSelectClick(e)}>{item}</option>}):null}
+          </select>:null}
         </label>
         </div >
         <div className='grid justify-items-center'>

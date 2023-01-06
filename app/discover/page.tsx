@@ -1,5 +1,6 @@
 'use client';
 import React, {useState, useEffect} from 'react';
+import LoadingSpinner from '@/ui/LoadingSpinner';
 
 export default function Page() {
     const [matches, setMatches] = useState(0);
@@ -44,13 +45,7 @@ export default function Page() {
 
     if (loading) {
         return (
-        <>
-        <div className="flex justify-center items-center h-screen w-screen">
-        <div className="text-gray-600 w-10 h-10 text-5xl mx-auto">
-        <i className="fas fa-spinner fa-spin animate-spin" />
-        </div>
-        </div>
-        </>
+        <LoadingSpinner />
         );
       }
     

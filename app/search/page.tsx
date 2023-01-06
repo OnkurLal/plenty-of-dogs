@@ -47,6 +47,7 @@ export default function Page() {
     if (!dogList.message.includes(inputValue) ) {
       setIsNotMatch(true)
       setDogData(null)
+      setLoading(false)
     }else{
       try {
       const response = await fetch(
@@ -83,9 +84,9 @@ export default function Page() {
   return (
     <div onClickCapture={() => setShowOptions(false)} className="flex flex-col items-center">
       <h1 className="m-4 text-3xl ">Search by Breed!</h1>
-      <div>
-        {IsNotMatch ? 'Breed name is misspelled or not in records' : null}
-      </div>
+      {IsNotMatch?<p className='p-2 mb-2 text-center text-white bg-red-500'>
+        Breed name is mispelled or not in records
+      </p>:null}
       <form onSubmit={handleSubmit} className="w-full max-w-sm">
         <div className='w-full'>
         <label className="m-4m block text-xl">

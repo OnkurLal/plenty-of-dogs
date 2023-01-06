@@ -85,7 +85,7 @@ export default function Page() {
     <div onClickCapture={() => setShowOptions(false)} className="flex flex-col items-center">
       <h1 className="m-4 text-3xl ">Search by Breed!</h1>
       {IsNotMatch?<p className='p-2 mb-2 text-center text-white bg-red-500'>
-        Breed name is mispelled or not in records
+        Breed name is misspelled or not in records
       </p>:null}
       <form onSubmit={handleSubmit} className="w-full max-w-sm">
         <div className='w-full'>

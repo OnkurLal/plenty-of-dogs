@@ -97,7 +97,6 @@ export default function Page() {
             value={inputValue}
             onChange={(e) => handleChange(e)}
             onClick={() => setShowOptions(true)}
-            // onBlur={() => setShowOptions(!showOptions)}
             className="form-input w-full mt-4 outline outline-2 outline-offset-2 outline-neutral-200"
           />
           {showOptions? <select onClick={(e) => handleSelectClick(e)} size={dogList?.message.length} > 

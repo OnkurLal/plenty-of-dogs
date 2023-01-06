@@ -1,5 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import LoadingSpinner from '@/ui/LoadingSpinner';
+
 export default function Page() {
   const [inputValue, setInputValue] = useState('');
   const [dogData, setDogData] = useState<any>(null);
@@ -37,7 +39,7 @@ export default function Page() {
 
   const handleSelectClick = (e:any) => {
     console.log('df')
-    setShowOptions(false)
+    setShowOptions(!showOptions)
     setInputValue(e.target.value)
   }
   const handleSubmit = async (e: any) => {
@@ -61,7 +63,7 @@ export default function Page() {
       setIsNotMatch(false)
     }
     setInputValue('')
-    setShowOptions(false)
+    setShowOptions(!showOptions)
   };
   const dogDataMap = dogData?.message.map((item: string) => {
     return (
@@ -71,13 +73,7 @@ export default function Page() {
 
   if (loading) {
     return (
-    <>
-    <div className="flex justify-center items-center h-screen w-screen">
-    <div className="text-gray-600 w-10 h-10 text-5xl mx-auto">
-    <i className="fas fa-spinner fa-spin animate-spin" />
-    </div>
-    </div>
-    </>
+    <LoadingSpinner />
     );
   }
 
@@ -105,8 +101,8 @@ export default function Page() {
             // onBlur={() => setShowOptions(!showOptions)}
             className="form-input w-full mt-4 outline outline-2 outline-offset-2 outline-neutral-200"
           />
-          {showOptions? <select size={dogList?.message.length} > 
-            {dogList ? dogList.message.map((item:string) => {return <option value={item} onClick={(e) => handleSelectClick(e)}>{item}</option>}):null}
+          {showOptions? <select onClick={(e) => handleSelectClick(e)} size={dogList?.message.length} > 
+            {dogList ? dogList.message.map((item:string) => {return <option value={item} >{item}</option>}):null}
           </select>:null}
         </label>
         </div >

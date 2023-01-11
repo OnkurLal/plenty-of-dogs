@@ -31,10 +31,17 @@ export default function Page() {
 
   const handleChange = (e: any) => {
     setInputValue(e.target.value);
-    if (unfilteredDogList?.message) {
     const selectFilteredList = unfilteredDogList?.message.filter((breed:string) => breed.includes(e.target.value));
+    if (unfilteredDogList?.message) {
     setDogList({message:selectFilteredList});
     }
+    const isValidBreed = unfilteredDogList?.message.some((breed:string) => breed ===e.target.value)
+    if (!isValidBreed){
+      setIsNotMatch(true)
+    }else{
+      setIsNotMatch(false)
+    }
+    console.log(`selectFilteredList: ${selectFilteredList}`)
   };
 
   const handleSelectClick = (e:any) => {
@@ -80,7 +87,7 @@ export default function Page() {
   if (error) {
     return <p>An error occurred: {error}</p>;
   }
-  console.log(inputValue)
+  console.log(IsNotMatch)
   return (
     <div onClickCapture={() => setShowOptions(false)} className="flex flex-col items-center">
       <h1 className="m-4 text-3xl ">Search by Breed!</h1>
@@ -108,7 +115,7 @@ export default function Page() {
         </label>
         </div >
         <div className='grid justify-items-center'>
-        <button type="submit" className="btn rounded bg-green-500 text-white mt-4 py-1 px-4 hover:bg-green-700">
+        <button type="submit" disabled={!unfilteredDogList?.message.some((breed:string) => breed ===inputValue)} className={`btn rounded ${IsNotMatch?"bg-neutral-400":"bg-green-500"}  text-white mt-4 py-1 px-4 ${IsNotMatch?null:"hover:bg-green-700"}`}>
           Search
         </button>
         </div>

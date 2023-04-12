@@ -8,7 +8,7 @@ Welcome to my Pupster App! This app allows the user to discover dog pictures usi
 
 - Clone this repo
   - git clone https://github.com/OnkurLal/plenty-of-dogs.git
-- Navigate to plenty-fo-dogs
+- Navigate to plenty-of-dogs
   - cd plenty-of-dogs
 - Install dependencies
   - npm install
